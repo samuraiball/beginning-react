@@ -4,7 +4,6 @@ class Products extends Component {
     render() {
 
         const products = ["Learning React","Pro React", "Beginning React"];
-
         const productsList = products.map((product)=>
             <li key={product.toString()}>
                 {product}
@@ -19,7 +18,6 @@ class Products extends Component {
             </div>
         );
     }
-
 }
 
 export default Products;
