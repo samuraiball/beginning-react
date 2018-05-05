@@ -14,13 +14,6 @@ class App extends Component {
             <div>
                 <h1>My first APP!!!</h1>
                 <Products/>
-                <Button bsStyle="primary" disabled={!isValid}>Default</Button>
-
-                <Rating rating="1"/>
-                <Rating rating="2"/>
-                <Rating rating="3"/>
-                <Rating rating="4"/>
-
             </div>
         );
     }
