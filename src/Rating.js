@@ -18,36 +18,36 @@ class Rating extends Component {
             startStyle: {
                 color: 'orange'
             }
-        }
+        };
         return (
-            <div>
-                <h1>Rating:{this.state.rating}</h1>
                 <div style={styles.startStyle}>
                     <Glyphicon
                         glyph={this.state.rating >= 1 ? 'star' : 'star-empty'}
+                        id="container"
                         onClick={this.handleClick.bind(this, 1)}
                     />
                     <Glyphicon
                         onClick={this.handleClick.bind(this, 2)}
+                        id="container"
                         glyph={this.state.rating >= 2 ? "star" : "star-empty"}
                     />
                     <Glyphicon
                         glyph={this.state.rating >= 3 ? "star" : "star-empty"}
+                        id="container"
                         onClick={this.handleClick.bind(this, 3)}
                     />
                     <Glyphicon
                         glyph={this.state.rating >= 4 ? "star" : "star-empty"}
+                        id="container"
                         onClick={this.handleClick.bind(this, 4)}
                     />
                     <Glyphicon
                         glyph={this.state.rating >= 5 ? "star" : "star-empty"}
+                        id="container"
                         onClick={this.handleClick.bind(this, 5)}
                     />
+                    {this.props.numOfReviews}
                 </div>
-                <h1>Ratinga</h1>
-            </div>
-
-
         )
     }
 }
