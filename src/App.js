@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Products from './Products';
-import {Button} from 'react-bootstrap';
-import Rating from './Rating'
+import  JumboTronComponent from './JumboTronComponent';
 
 class App extends Component {
     render() {
@@ -14,6 +12,9 @@ class App extends Component {
             <div>
                 <h1>My first APP!!!</h1>
                 <Products/>
+                <JumboTronComponent>
+                    support
+                </JumboTronComponent>
             </div>
         );
     }

@@ -49,12 +49,9 @@ class Products extends Component {
         return (
             <div>
                 <ul>
-                    {productsList.length > 0 &&
-                    <ul>{productsList}</ul>
-                    }
-
-                    {productsList.length === 0 &&
-                    <ul>No product to display</ul>
+                    {productsList.length > 0 ?
+                        (<ul>{productsList}</ul>) :
+                        (<ul>No product to display</ul>)
                     }
                 </ul>
             </div>
