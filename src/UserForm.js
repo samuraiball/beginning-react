@@ -3,8 +3,14 @@ import {FormGroup, ControlLabel, FormControl, HelpBlock} from 'react-bootstrap';
 
 
 class UserForm extends Component {
+    errorUsername;
+    errorPassword;
+
     constructor(props) {
         super(props);
+        this.errorPassword = '';
+        this.errorUsername = '';
+
         this.state = {
             username: '',
             password: '',
@@ -17,12 +23,26 @@ class UserForm extends Component {
 
 
     getUserNameValidationState() {
-        const length = this.state.username;
+        const length = this.state.username.length;
 
         //一度でもフォーカスが当たればValidationをかける
         if (this.state.usernameTouched) {
-            if (length < 3) return 'error';
-            else return 'success';
+            if (length === 0) {
+                this.errorUsername = 'Username is required';
+                return 'error';
+            }
+            else if (length < 3) {
+                this.errorUsername = 'Username should be minimum 3 characters';
+                return 'error';
+            }
+            else if (this.state.username.indexOf(' ') >= 0) {
+                this.errorUsername = 'Username cannot contain spaces';
+                return 'error';
+            }
+            else {
+                this.errorUsername = '';
+                return 'success';
+            }
         }
     }
 
@@ -37,7 +57,12 @@ class UserForm extends Component {
 
 
     handleChange(e) {
-        this.setState({value: e.target.value})
+        const target = e.target;
+        const name = target.name;
+        const value = target.value;
+        this.setState({
+            [name]: value
+        });
     }
 
     handleBlur(e) {
@@ -47,7 +72,6 @@ class UserForm extends Component {
         this.setState({
             [name + 'Touched']: true
         });
-       console.log(this.state.passwordTouched)
     }
 
     render() {
@@ -67,7 +91,9 @@ class UserForm extends Component {
                         onBlur={this.handleBlur}
                     />
                     <FormControl.Feedback/>
-                    <HelpBlock>Validation is based on string length.</HelpBlock>
+                    <HelpBlock>
+                    {this.errorUsername.length > 0 &&
+                        <HelpBlock>{this.errorUsername}</HelpBlock>}</HelpBlock>
                 </FormGroup>
 
                 <FormGroup
@@ -84,7 +110,9 @@ class UserForm extends Component {
                         onBlur={this.handleBlur}
                     />
                     <FormControl.Feedback/>
-                    <HelpBlock>Validation is based on string length.</HelpBlock>
+                    {this.errorPassword.length > 0 &&
+                        <HelpBlock>{this.errorPassword}</HelpBlock>}
+                    <FormControl.Feedback/>
                 </FormGroup>
             </form>
         )
