@@ -6,6 +6,14 @@ class UserForm extends Component {
     errorUsername;
     errorPassword;
 
+    login(password, username) {
+
+        if (username === "jason" && password === "123") {
+            return true;
+        }
+        else return false;
+    }
+
     constructor(props) {
         super(props);
         this.errorPassword = '';
@@ -16,10 +24,11 @@ class UserForm extends Component {
             password: '',
             usernameTouched: false,
             passwordTouched: false,
+            errorLogin:false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
-        this.handleSubmit = this.handleSubmit(this)
+        this.handleSubmit = this.canBeSubmitted(this);
     }
 
 
@@ -47,6 +56,14 @@ class UserForm extends Component {
         }
     }
 
+
+    canBeSubmitted() {
+        return (
+            this.state.usernameTouched && this.state.passwordTouched
+            && this.errorUsername.length === 0 && this.errorPassword.length === 0
+        )
+    }
+
     getPasswordValidationState() {
         const length = this.state.password.length;
         //一度でもフォーカスが当たればValidationをかける
@@ -57,7 +74,7 @@ class UserForm extends Component {
             }
             else if (length < 8) {
                 this.errorPassword = 'Password has to be more than 8';
-                return 'warning';
+                return 'error';
             }
             else if (length < 10) {
                 this.errorPassword = 'Password should be more than 10';
@@ -90,12 +107,28 @@ class UserForm extends Component {
         });
     }
 
-    handleSubmit(e) {
+    handleSubmit(event) {
+
+
+        if (!this.canBeSubmitted()) {
+            event.preventDefault();
+            return;
+        }
+        else {
+            if (!this.login(this.state.password, this.state.username)) {
+                event.preventDefault();
+                console.log("Login Invalid");
+                return;
+            }
+        }
         alert('User Name:' + this.state.username
             + '\nPassword:' + this.state.password)
     }
 
     render() {
+
+        const isEnable = this.canBeSubmitted();
+
         return (
             <form onSubmit={this.handleSubmit}>
                 <FormGroup
@@ -135,7 +168,7 @@ class UserForm extends Component {
                     <HelpBlock>{this.errorPassword}</HelpBlock>}
                     <FormControl.Feedback/>
                 </FormGroup>
-                <Button type="submit">
+                <Button type="submit" disabled={!isEnable}>
                     Submit
                 </Button>
             </form>
