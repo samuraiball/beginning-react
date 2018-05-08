@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {FormGroup, ControlLabel, FormControl, HelpBlock, Button} from 'react-bootstrap';
+import {FormGroup, ControlLabel, FormControl, HelpBlock, Button, Alert} from 'react-bootstrap';
 
 
 class UserForm extends Component {
@@ -24,7 +24,7 @@ class UserForm extends Component {
             password: '',
             usernameTouched: false,
             passwordTouched: false,
-            errorLogin:false,
+            errorLogin: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
@@ -108,7 +108,7 @@ class UserForm extends Component {
     }
 
     handleSubmit(event) {
-
+        this.errorLogin = false;
 
         if (!this.canBeSubmitted()) {
             event.preventDefault();
@@ -116,11 +116,17 @@ class UserForm extends Component {
         }
         else {
             if (!this.login(this.state.password, this.state.username)) {
+                this.setState({
+                    errorLogin: true,
+                });
                 event.preventDefault();
                 console.log("Login Invalid");
                 return;
             }
         }
+        this.setState({
+            errorLogin: false,
+        });
         alert('User Name:' + this.state.username
             + '\nPassword:' + this.state.password)
     }
@@ -171,6 +177,10 @@ class UserForm extends Component {
                 <Button type="submit" disabled={!isEnable}>
                     Submit
                 </Button>
+                {
+                    this.state.errorLogin &&
+                    <Alert bsStyle="danger"> <strong>Error</strong> Username or password is invalid. </Alert>
+                }
             </form>
         )
     }
