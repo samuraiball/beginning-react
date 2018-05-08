@@ -1,10 +1,18 @@
 import React, {Component} from 'react';
-import {FormGroup, ControlLabel, FormControl, HelpBlock} from 'react-bootstrap';
+import {FormGroup, ControlLabel, FormControl, HelpBlock, Button, Alert} from 'react-bootstrap';
 
 
 class UserForm extends Component {
     errorUsername;
     errorPassword;
+
+    login(password, username) {
+
+        if (username === "jason" && password === "123") {
+            return true;
+        }
+        else return false;
+    }
 
     constructor(props) {
         super(props);
@@ -16,9 +24,11 @@ class UserForm extends Component {
             password: '',
             usernameTouched: false,
             passwordTouched: false,
+            errorLogin: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
+        this.handleSubmit = this.canBeSubmitted(this);
     }
 
 
@@ -46,12 +56,35 @@ class UserForm extends Component {
         }
     }
 
+
+    canBeSubmitted() {
+        return (
+            this.state.usernameTouched && this.state.passwordTouched
+            && this.errorUsername.length === 0 && this.errorPassword.length === 0
+        )
+    }
+
     getPasswordValidationState() {
         const length = this.state.password.length;
         //一度でもフォーカスが当たればValidationをかける
         if (this.state.passwordTouched) {
-            if (length < 3) return 'error';
-            else return 'success';
+            if (length === 0) {
+                this.errorPassword = 'Password';
+                return 'error';
+            }
+            else if (length < 8) {
+                this.errorPassword = 'Password has to be more than 8';
+                return 'error';
+            }
+            else if (length < 10) {
+                this.errorPassword = 'Password should be more than 10';
+                return 'warning';
+            }
+            else {
+                this.errorPassword = '';
+                return 'success'
+            }
+
         }
     }
 
@@ -74,9 +107,36 @@ class UserForm extends Component {
         });
     }
 
+    handleSubmit(event) {
+        this.errorLogin = false;
+
+        if (!this.canBeSubmitted()) {
+            event.preventDefault();
+            return;
+        }
+        else {
+            if (!this.login(this.state.password, this.state.username)) {
+                this.setState({
+                    errorLogin: true,
+                });
+                event.preventDefault();
+                console.log("Login Invalid");
+                return;
+            }
+        }
+        this.setState({
+            errorLogin: false,
+        });
+        alert('User Name:' + this.state.username
+            + '\nPassword:' + this.state.password)
+    }
+
     render() {
+
+        const isEnable = this.canBeSubmitted();
+
         return (
-            <form>
+            <form onSubmit={this.handleSubmit}>
                 <FormGroup
                     controlId="formBasicText"
                     validationState={this.getUserNameValidationState()}
@@ -92,7 +152,7 @@ class UserForm extends Component {
                     />
                     <FormControl.Feedback/>
                     <HelpBlock>
-                    {this.errorUsername.length > 0 &&
+                        {this.errorUsername.length > 0 &&
                         <HelpBlock>{this.errorUsername}</HelpBlock>}</HelpBlock>
                 </FormGroup>
 
@@ -103,7 +163,7 @@ class UserForm extends Component {
                     <ControlLabel>Password</ControlLabel>
                     <FormControl
                         name="password"
-                        type="text"
+                        type="password"
                         value={this.state.password}
                         placeholder="Enter Password"
                         onChange={this.handleChange}
@@ -111,9 +171,16 @@ class UserForm extends Component {
                     />
                     <FormControl.Feedback/>
                     {this.errorPassword.length > 0 &&
-                        <HelpBlock>{this.errorPassword}</HelpBlock>}
+                    <HelpBlock>{this.errorPassword}</HelpBlock>}
                     <FormControl.Feedback/>
                 </FormGroup>
+                <Button type="submit" disabled={!isEnable}>
+                    Submit
+                </Button>
+                {
+                    this.state.errorLogin &&
+                    <Alert bsStyle="danger"> <strong>Error</strong> Username or password is invalid. </Alert>
+                }
             </form>
         )
     }
