@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import ReactLoading from 'react-loading'
 import {Media, Form, FormGroup, FormControl, Button} from 'react-bootstrap'
+import {Link} from 'react-router-dom';
 
 class GitHub extends Component {
     constructor() {
@@ -33,7 +34,7 @@ class GitHub extends Component {
     handleSubmit(e) {
         e.preventDefault();
         this.setState({
-            isLoading: false,
+            isLoading: true,
         });
         this.getGitHubData(this.state.searchTerm);
     }
@@ -50,9 +51,9 @@ class GitHub extends Component {
         const userList = this.state.data.map((user) =>
             <Media key={user.id}>
                 <Media.Left>
-                    <a href={user.html_url}>
+                    <Link to={`/github/user/${user.login}/${user.score}`}>
                         <img width={64} height={64} src={user.avatar_url} alt="Image"/>
-                    </a>
+                    </Link>
                 </Media.Left>
                 <Media.Body>
                     <Media.Heading>
