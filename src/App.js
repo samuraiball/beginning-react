@@ -3,6 +3,7 @@ import './App.css';
 import Products from './Products';
 import  JumboTronComponent from './JumboTronComponent';
 import UserForm from './UserForm';
+import GitHub from './GitHub';
 
 class App extends Component {
     render() {
@@ -11,6 +12,7 @@ class App extends Component {
 
         return (
             <div>
+                <GitHub/>
                 <h1>My first APP!!!</h1>
                 <Products/>
                 <JumboTronComponent>
